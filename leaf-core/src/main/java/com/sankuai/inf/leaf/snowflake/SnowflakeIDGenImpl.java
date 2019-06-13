@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.sankuai.inf.leaf.IDGen;
 import com.sankuai.inf.leaf.common.Result;
 import com.sankuai.inf.leaf.common.Status;
-import com.sankuai.inf.leaf.common.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +32,9 @@ public class SnowflakeIDGenImpl implements IDGen {
     private static final Random RANDOM = new Random();
     private int port;
 
-    public SnowflakeIDGenImpl(String zkAddress, int port) {
+    public SnowflakeIDGenImpl(String ip, String zkAddress, int port) {
         this.port = port;
-        SnowflakeZookeeperHolder holder = new SnowflakeZookeeperHolder(Utils.getIp(), String.valueOf(port), zkAddress);
+        SnowflakeZookeeperHolder holder = new SnowflakeZookeeperHolder(ip, String.valueOf(port), zkAddress);
         initFlag = holder.init();
         if (initFlag) {
             workerId = holder.getWorkerID();

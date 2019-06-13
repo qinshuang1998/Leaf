@@ -12,7 +12,7 @@ public class SnowflakeIDGenImplTest {
     public void testGetId() {
         Properties properties = PropertyFactory.getProperties();
 
-        IDGen idGen = new SnowflakeIDGenImpl(properties.getProperty("leaf.zk.list"), 8080);
+        IDGen idGen = new SnowflakeIDGenImpl("", properties.getProperty("leaf.zk.list"), 8080);
         for (int i = 1; i < 1000; ++i) {
             Result r = idGen.get("a");
             System.out.println(r);

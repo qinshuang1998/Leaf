@@ -13,25 +13,10 @@ import java.util.List;
 
 public class Utils {
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
-
-    public static String getIp() {
+    public static String getIp(String... interfaceName) {
         String ip;
         try {
-            List<String> ipList = getHostAddress(null);
-            // default the first
-            ip = (!ipList.isEmpty()) ? ipList.get(0) : "";
-        } catch (Exception ex) {
-            ip = "";
-            logger.warn("Utils get IP warn", ex);
-        }
-        return ip;
-    }
-
-    public static String getIp(String interfaceName) {
-        String ip;
-        interfaceName = interfaceName.trim();
-        try {
-            List<String> ipList = getHostAddress(interfaceName);
+            List<String> ipList = (interfaceName.length == 0) ? getHostAddress(null) : getHostAddress(interfaceName[0].trim());
             ip = (!ipList.isEmpty()) ? ipList.get(0) : "";
         } catch (Exception ex) {
             ip = "";

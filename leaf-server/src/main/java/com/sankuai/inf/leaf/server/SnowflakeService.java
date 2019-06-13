@@ -3,6 +3,7 @@ package com.sankuai.inf.leaf.server;
 import com.sankuai.inf.leaf.IDGen;
 import com.sankuai.inf.leaf.common.PropertyFactory;
 import com.sankuai.inf.leaf.common.Result;
+import com.sankuai.inf.leaf.common.Utils;
 import com.sankuai.inf.leaf.common.ZeroIDGen;
 import com.sankuai.inf.leaf.server.exception.InitException;
 import com.sankuai.inf.leaf.snowflake.SnowflakeIDGenImpl;
@@ -22,7 +23,9 @@ public class SnowflakeService {
         if (flag) {
             String zkAddress = properties.getProperty(Constants.LEAF_SNOWFLAKE_ZK_ADDRESS);
             int port = Integer.parseInt(properties.getProperty(Constants.LEAF_SNOWFLAKE_PORT));
-            idGen = new SnowflakeIDGenImpl(zkAddress, port);
+            boolean moreNic = Boolean.parseBoolean(properties.getProperty(Constants.LEAF_NIC_ENABLE, "true"));
+            String ip = (moreNic) ? Utils.getIp(properties.getProperty(Constants.LEAF_NIC_NAME)) : Utils.getIp();
+            idGen = new SnowflakeIDGenImpl(ip, zkAddress, port);
             if(idGen.init()) {
                 logger.info("Snowflake Service Init Successfully");
             } else {
