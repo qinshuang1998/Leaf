@@ -1,10 +1,42 @@
-# Leaf
+# Leaf (future版本)
 
 > There are no two identical leaves in the world.
 >
 > 世界上没有两片完全相同的树叶。
 >
 > ​								— 莱布尼茨
+
+## New Features
+
+此future版本加入了leaf-client的HTTP调用版本，其提供的api可以方便的获取到leaf-server下发的ID。
+leaf-clent提供两种不同的工厂生产ID：
+**DefaultFactory**：默认ID工厂，每一次api调用都会给leaf-server发送HTTP请求来获取ID
+
+#### 使用示例：
+
+```java
+LeafClientConfig clientConfig = LeafClientConfig.getInstance();
+clientConfig.setLeafServer("127.0.0.1:8080");
+clientConfig.setSnowflakeMode(true);
+LeafFactory defaultLeafFactory = new DefaultLeafFactoryImpl();
+defaultLeafFactory.init();
+System.out.println(defaultLeafFactory.nextId());
+```
+
+**CachedFactory**：缓存ID工厂，使用环状数组来缓存leaf-server生成的ID，在系统初始化期间会填充满数组缓存空间，每一次api调用只是去本地的缓存中获取ID，当本地缓存的ID数量少于设置阈值时会触发异步填充，确保缓存随时可用。
+Leaf服务内部有号段缓存，即使DB宕机，短时间内Leaf仍能正常对外提供服务，但从本质上来讲，其号段方式的ID下发，最终还是需要强依赖DB，面对瞬时流量几十、几百倍的暴增，该种方案仍不能满足可以容忍数据库在一段时间不可用、系统仍能稳定运行的需求。
+这里从leaf-server和leaf-client两方提供缓存机制，目的是为了提高Leaf的容灾性。
+
+#### 使用示例：
+
+```java
+LeafClientConfig clientConfig = LeafClientConfig.getInstance();
+clientConfig.setLeafServer("127.0.0.1:8080");
+clientConfig.setSnowflakeMode(true);
+LeafFactory cachedLeafFactory = new CachedLeafFactoryImpl();
+cachedLeafFactory.init();
+System.out.println(cachedLeafFactory.nextId());
+```
 
 ## Introduction
 
