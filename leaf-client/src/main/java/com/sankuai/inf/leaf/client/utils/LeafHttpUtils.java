@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -37,7 +38,7 @@ public class LeafHttpUtils {
             conn.setConnectTimeout(connectTimeout);
             conn.setUseCaches(false);
             conn.connect();
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
             while ((line = rd.readLine()) != null) {
                 sb.append(line);
             }
@@ -89,10 +90,10 @@ public class LeafHttpUtils {
             conn.setConnectTimeout(connectTimeout);
             conn.setUseCaches(false);
             conn.connect();
-            os = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+            os = new OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8);
             os.write(param.toString());
             os.flush();
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
             while ((line = rd.readLine()) != null) {
                 sb.append(line);
             }

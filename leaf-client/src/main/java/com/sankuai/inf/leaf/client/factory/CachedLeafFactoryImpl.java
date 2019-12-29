@@ -32,8 +32,10 @@ public class CachedLeafFactoryImpl extends DefaultLeafFactoryImpl {
     private int bufferSize = LeafClientConfig.getInstance().getCachedSize();
 
     protected List<Long> nextIdsProvider() {
-        List<Long> uidList = new ArrayList<>(bufferSize);
-        for (int offset = 0; offset < bufferSize; offset++) {
+        // provide bufferSize + 1
+        // let (BufferPaddingExecutor -> paddingBuffer -> isFullRingBuffer) become true at first loop
+        List<Long> uidList = new ArrayList<>(bufferSize + 1);
+        for (int offset = 1; offset < bufferSize + 1; offset++) {
             uidList.add(super.nextId());
         }
         return uidList;
